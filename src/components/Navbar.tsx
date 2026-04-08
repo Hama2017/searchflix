@@ -1,3 +1,4 @@
+import type { Theme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -31,7 +32,7 @@ function Navbar() {
 export default Navbar;
 
 const styles = {
-  appBar: (theme: any) => ({
+  appBar: (theme: Theme) => ({
     backgroundColor: theme.palette.background.default,
     boxShadow: 'none',
     borderBottom: `1px solid ${theme.palette.divider}`,
@@ -50,11 +51,11 @@ const styles = {
     letterSpacing: 1,
     whiteSpace: 'nowrap',
   },
-  search: (theme: any) => ({
+  search: (theme: Theme) => ({
     color: theme.palette.text.primary,
     display: 'inline-block',
   }),
-  cursor: (theme: any) => ({
+  cursor: (theme: Theme) => ({
     color: theme.palette.primary.main,
     animation: 'blink 1s step-end infinite',
     '@keyframes blink': {
@@ -62,7 +63,7 @@ const styles = {
       '50%': { opacity: 0 },
     },
   }),
-  flix: (theme: any) => ({
+  flix: (theme: Theme) => ({
     color: theme.palette.primary.main,
   }),
 };
