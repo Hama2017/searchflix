@@ -1,40 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 import theme from './theme';
 import Navbar from './components/Navbar';
 import SearchBar from './components/SearchBar';
 import ResultsList from './components/ResultsList';
 import ResultsSkeleton from './components/ResultsSkeleton';
 import NotFound from './components/NotFound';
-import type { MovieSearchResult } from './types/Movie';
-import Typography from '@mui/material/Typography';
-import { handleSearch } from './utils/handlers/handleSearch';
+import { SearchProvider, useSearch } from './context/SearchContext';
 
-function App() {
+function AppContent() {
 
-  const [results, setResults] = useState<MovieSearchResult[] | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { results, loading, error, search } = useSearch();
 
   useEffect(() => {
-    handleSearch('marvel', setResults, setLoading);
+    search('marvel');
   }, []);
 
   return (
+    <Box sx={{ p: 4 }}>
+      <SearchBar onSearch={search} />
+      {error && <Alert severity="error" sx={{ mt: 3 }}>{error}</Alert>}
+      {!loading && results !== null && results.length > 0 && (
+        <Typography variant="body2" sx={{ mt: 3, color: 'text.secondary' }}>
+          {results.length} résultat{results.length > 1 ? 's' : ''}
+        </Typography>
+      )}
+      {loading && <ResultsSkeleton />}
+      {!loading && results !== null && results.length === 0 && <NotFound />}
+      {!loading && results !== null && results.length > 0 && <ResultsList movies={results} />}
+    </Box>
+  );
+}
+
+function App() {
+  return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Navbar />
-      <Box sx={{ p: 4 }}>
-        <SearchBar onSearch={(query) => handleSearch(query, setResults, setLoading)} />
-        {!loading && results !== null && results.length > 0 && (
-          <Typography variant="body2" sx={{ mt: 3, color: 'text.secondary' }}>
-            {results.length} résultat{results.length > 1 ? 's' : ''}
-          </Typography>
-        )}
-        {loading && <ResultsSkeleton />}
-        {!loading && results !== null && results.length === 0 && <NotFound />}
-        {!loading && results !== null && results.length > 0 && <ResultsList movies={results} />}
-      </Box>
+      <SearchProvider>
+        <Navbar />
+        <AppContent />
+      </SearchProvider>
     </ThemeProvider>
   );
 }

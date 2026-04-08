@@ -1,4 +1,4 @@
-import type { MovieSearchResult } from '../types/Movie';
+import type { Movie, MovieSearchResult } from '../types/Movie';
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 const BASE_URL = 'https://www.omdbapi.com';
@@ -13,4 +13,12 @@ export async function searchMovies(query: string): Promise<MovieSearchResult[]> 
   if (data.Response === 'False') return [];
 
   return data.Search as MovieSearchResult[];
+}
+
+export async function getMovieById(imdbID: string): Promise<Movie> {
+  const response = await fetch(`${BASE_URL}/?i=${imdbID}&plot=full&apikey=${API_KEY}`);
+
+  if (!response.ok) throw new Error('Erreur réseau');
+
+  return response.json() as Promise<Movie>;
 }
