@@ -43,7 +43,7 @@ const styles = {
     alignItems: 'center',
     maxWidth: 600,
     mx: 'auto',
-    mt: 6,
+    mt: 2,
     px: 2,
     py: 0.5,
     borderRadius: '999px',
